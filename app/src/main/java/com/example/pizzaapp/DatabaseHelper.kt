@@ -6,27 +6,30 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.provider.ContactsContract.CommonDataKinds.Email
+import android.widget.Toast
 
-class DatabaseHelper(context:Context): SQLiteOpenHelper(
+class DatabaseHelper(var context: Context): SQLiteOpenHelper (
     context,DATABASE_NAME,null,DATABASE_VERSION
 ) {
+
     companion object{
-        private val DATABASE_NAME = "pizza_2655"
+        private val DATABASE_NAME = "pizza"
         private val DATABASE_VERSION = 1
-        //Table Name
+        //table name
         private val TABLE_ACCOUNT = "account"
-        //Column Account Table
+        //column account table
         private val COLUMN_EMAIL = "email"
         private val COLUMN_NAME = "name"
         private val COLUMN_LEVEL = "level"
         private val COLUMN_PASSWORD = "password"
     }
-    //create table account sql
-    private val CREATE_ACCOUNT_TABLE = ("CREATE TABLE " + TABLE_ACCOUNT + "("
-            + COLUMN_EMAIL + " TEXT PRIMARY KEY, " + COLUMN_NAME + " TEXT, "
-            + COLUMN_LEVEL + " TEXT, " + COLUMN_PASSWORD + " TEXT)")
 
-    //drop table account sql querry
+    //create table account sql query
+    private val CREATE_ACCOUNT_TABLE = ("CREATE TABLE " + TABLE_ACCOUNT + "("
+            + COLUMN_EMAIL + " TEXT PRIMARY KEY, "+ COLUMN_NAME +" TEXT, "
+            + COLUMN_LEVEL + " TEXT, "+ COLUMN_PASSWORD +" TEXT)")
+
+    //drop table account sql query
     private val DROP_ACCOUNT_TABLE = "DROP TABLE IF EXISTS $TABLE_ACCOUNT"
 
     override fun onCreate(p0: SQLiteDatabase?) {
@@ -39,21 +42,21 @@ class DatabaseHelper(context:Context): SQLiteOpenHelper(
     }
 
     //login check
-    fun checklogin(email:String, password:String):Boolean{
+    fun checkLogin(email:String, password:String):Boolean{
         val colums = arrayOf(COLUMN_NAME)
         val db = this.readableDatabase
         //selection criteria
         val selection = "$COLUMN_EMAIL = ? AND $COLUMN_PASSWORD = ?"
         //selection arguments
-        val selectionArgs = arrayOf(email, password)
+        val selectionArgs = arrayOf(email,password)
 
-        val cursor = db.query(TABLE_ACCOUNT,
-            colums,
-            selection,
-            selectionArgs,
-            null,
-            null,
-            null)
+        val cursor = db.query(TABLE_ACCOUNT, //table to query
+            colums, //columns to return
+            selection, //columns for WHERE clause
+            selectionArgs, //the values for
+            null, //group the rows
+            null, //filter by row groups
+            null) //the sort order
 
         val cursorCount = cursor.count
         cursor.close()
@@ -61,13 +64,14 @@ class DatabaseHelper(context:Context): SQLiteOpenHelper(
 
         //check data available or not
         if(cursorCount > 0)
-            return  true
+            return true
         else
             return false
     }
 
-    fun addAccount(email:String, name:String, level:String, password:String){
-        val db = this.writableDatabase
+    //add User
+    fun addAccount(email: String, name:String, level:String, password:String){
+        val db = this.readableDatabase
 
         val values = ContentValues()
         values.put(COLUMN_EMAIL, email)
@@ -75,25 +79,35 @@ class DatabaseHelper(context:Context): SQLiteOpenHelper(
         values.put(COLUMN_LEVEL, level)
         values.put(COLUMN_PASSWORD, password)
 
-        db.insert(TABLE_ACCOUNT, null, values)
-        db.close()
+        val result = db.insert(TABLE_ACCOUNT, null, values)
+
+        //Show Massage
+        if (result == (0).toLong()){
+            Toast.makeText(context, "Reister Failed", Toast.LENGTH_SHORT).show()
+        } else {
+            Toast.makeText(context, "Register Success, " +
+            "Please Login using your new account", Toast.LENGTH_SHORT).show()
         }
 
+        db.insert(TABLE_ACCOUNT,null,values)
+        db.close()
+    }
+
     @SuppressLint("Range")
-    fun checkData(email: String):String{
+    fun checkData(email:String):String{
         val colums = arrayOf(COLUMN_NAME)
         val db = this.readableDatabase
         val selection = "$COLUMN_EMAIL = ?"
         val selectionArgs = arrayOf(email)
         var name:String = ""
 
-        val cursor = db.query(TABLE_ACCOUNT,
-            colums,
-            selection,
-            selectionArgs,
-            null,
-            null,
-            null)
+        val cursor = db.query(TABLE_ACCOUNT, //table to query
+            colums, //columns to return
+            selection, //columns for WHERE clause
+            selectionArgs, //the values for
+            null, //group the rows
+            null, //filter by row groups
+            null) //the sort order
 
         if(cursor.moveToFirst()){
             name = cursor.getString(cursor.getColumnIndex(COLUMN_NAME))
@@ -101,6 +115,5 @@ class DatabaseHelper(context:Context): SQLiteOpenHelper(
         cursor.close()
         db.close()
         return name
-
     }
 }
