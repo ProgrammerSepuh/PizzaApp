@@ -79,28 +79,31 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/editTextPassword" />
 
-    <LinearLayout
-        android:id="@+id/linear"
-        android:layout_width="match_parent"
+    <TextView
+        android:id="@+id/textView9"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center"
+        android:layout_marginStart="115dp"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="10dp"
+        android:text="Don't have a account?"
+        android:textColor="#F44336"
+        app:layout_constraintEnd_toStartOf="@+id/editTextRegister"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
-        tools:ignore="MissingConstraints">
+        tools:ignore="MissingConstraints" />
 
-        <TextView
-            android:id="@+id/textView9"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Don't Have an Account ?" />
-
-        <TextView
-            android:id="@+id/registText"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:text="Register Here"
-            android:textColor="#D02C1A" />
-    </LinearLayout>
+    <TextView
+        android:id="@+id/editTextRegister"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:layout_marginEnd="109dp"
+        android:text="Register"
+        android:textColor="#F44336"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonLogin"
+        tools:ignore="MissingConstraints" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,5 @@
 package com.example.pizzaapp
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -8,9 +7,9 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import org.w3c.dom.Text
 
 class LoginActivity : AppCompatActivity() {
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -23,34 +22,35 @@ class LoginActivity : AppCompatActivity() {
         val txtPassword:EditText = findViewById(R.id.editTextPassword)
         //instance button login
         val btnLogin:Button = findViewById(R.id.buttonLogin)
-        val btnRegist:TextView = findViewById(R.id.registText)
+        val btnRegister:TextView = findViewById(R.id.editTextRegister)
 
-        //event button REGIST
-        btnRegist.setOnClickListener {
-            val intentRegist = Intent(this, RegisterActivity::class.java)
-            startActivity(intentRegist)
+        //Intent Register
+        btnRegister.setOnClickListener{
+            val intentRegister = Intent(this, RegisterActivity::class.java)
+            startActivity(intentRegister)
         }
+
         //event button login
         btnLogin.setOnClickListener {
             //object class databaseHelper
             val databaseHelper = DatabaseHelper(this)
 
-            //check data
+//            check data
 //            val data:String = databaseHelper.checkData("stevi.ema@amikom.ac.id")
 //            Toast.makeText(this@LoginActivity,"Result : " + data,
 //                Toast.LENGTH_SHORT).show()
 //            if(data == null){
-            //insert data
-            //databaseHelper.addAccount("stevi.ema@amikom.ac.id",
-             //   "Stevi Ema W","Cashier","12345")
+//                insert data
+//                databaseHelper.addAccount("stevi.ema@amikom.ac.id",
+//                    "Stevi Ema W","Cashier","12345")
 //            }
 
             val email = txtUsername.text.toString().trim()
             val password = txtPassword.text.toString().trim()
 
             //check login
-            val result:Boolean = databaseHelper.checkLogin(email, password)
-            if (result == true){
+            val result:Boolean = databaseHelper.checkLogin(email,password)
+            if (result != true){
                 Toast.makeText(this@LoginActivity, "Login Success",
                     Toast.LENGTH_SHORT).show()
                 val intentLogin = Intent(this@LoginActivity,
